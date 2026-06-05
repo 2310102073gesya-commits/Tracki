@@ -1,0 +1,455 @@
+# 🤖 AI_SPEC.md — Tracki
+## Daftar Isi
+## 1. Pendahuluan & Prinsip AI Tracki
+### 1.1 Prinsip Desain AI
+### 1.2 Model AI yang Digunakan
+## 2. Daftar Fitur AI
+## 3. Fitur 1 — Scan Struk AI (OCR)
+### 3.1 Deskripsi Fitur
+### 3.2 Alur Data Lengkap
+### 3.6 Image Pre-processing (Frontend)
+### 3.3 Endpoint Spesifikasi
+### 3.4 Validasi Input
+### 3.5 Implementasi Edge Function
+## 4. Fitur 2 — AI Insight Syariah
+### 4.1 Deskripsi Fitur
+### 4.2 Trigger Pembuatan Insight
+### 4.3 Data yang Dikirim ke Gemini
+#### PII Masking Level 2 — Kolom `notes` (Catatan Transaksi)
+### 4.4 Struktur Response & Penyimpanan Cache
+### 4.5 Disclaimer Management — Wajib pada Semua Output AI-02
+### 4.6 Threshold Syubhat — Penanganan Dana Ragu-ragu
+### 4.7 Manual Correction Feedback Loop
+## 5. Fitur 3 — AI Nudge Split Bill
+### 5.1 Deskripsi Fitur
+### 5.2 Alur Pembuatan Nudge
+### 5.3 Endpoint Spesifikasi
+### 5.4 Data yang Dikirim ke Gemini
+## 6. Prompt Registry
+### 6.1 Prompt: OCR Scan Struk (`PROMPT_SCAN_V1`)
+### 6.2 Prompt: AI Insight Syariah (`PROMPT_INSIGHT_V1`)
+### 6.3 Prompt: AI Nudge Split Bill (`PROMPT_NUDGE_V1`)
+### 6.4 Panduan Pembaruan Prompt
+## 7. Kontrak Integrasi AI (AI Contract)
+### 7.1 Kontrak Input
+#### Prompt Injection Protection
+### 7.2 Kontrak Output
+### 7.3 Interface Standar AI Client
+## 8. Rate Limiting & Quota Management
+### 8.1 Konfigurasi Rate Limit per Fitur
+### 8.2 Implementasi Rate Limiter
+### 8.3 Response Saat Rate Limit Tercapai
+## 9. AI Cache Strategy
+### 9.1 Strategi Cache per Fitur
+### 9.2 Skema Kolom Cache di Database
+### 9.3 Cache Invalidation Logic
+### 9.4 Global Prompt Caching (Gemini Context Caching)
+## 10. Error Handling & Fallback
+### 10.1 Matriks Error & Penanganan
+### 10.2 Retry Strategy
+### 10.3 Graceful Degradation UI
+### 10.4 Partial Extraction Strategy (`PARTIAL_SUCCESS`)
+## 11. Privasi & Kepatuhan
+### 11.1 Ringkasan Kontrol Privasi per Fitur AI
+### 11.2 Kolom Consent di Database
+### 11.3 Pencabutan Consent
+## 12. Monitoring & Observability
+### 12.1 Metrik yang Dipantau
+### 12.2 Log yang Dicatat (Tanpa PII)
+### 12.3 Alert & On-Call
+### 12.4 Cost per User Tracking
+### 12.5 Human-in-the-loop Sampling (Quality Audit)
+## 13. Dokumen Terkait
+# 🏗️ ARCHITECTURE.md — Tracki
+## Daftar Isi
+## 1. Gambaran Sistem
+## 2. Tech Stack & Justifikasi
+## 3. Strategi Cost Control & Rate Limiting
+### 3.1 Tabel Batas & Strategi per Fitur
+### 3.2 Implementasi Rate Limiting dengan Upstash
+### 3.3 Shared Cache Gold Price
+### 3.4 AI Insight Cache per User
+## 4. Arsitektur Hybrid Web & Mobile
+### 4.1 Perbandingan Pengalaman
+### 4.2 Deteksi Platform & Adaptive UI
+### 4.3 PWA Manifest untuk A2HS
+### 4.4 Sinkronisasi Web ↔ Mobile
+### Diagram Lengkap
+### Penjelasan Setiap Layer
+## 4. Struktur Project
+## 5. Database Schema
+### Overview Relasi Tabel
+### Tabel: `transactions`
+### Tabel: `split_sessions`
+### Tabel: `split_members`
+### Tabel: `zakat_records`
+### Row Level Security (RLS) — Semua Tabel
+## 6. Data Flow Diagram
+### 6.1 Alur Scan Struk AI
+### 6.2 Alur Input Transaksi Offline-First
+### 6.3 Alur Zakat Profesi Otomatis
+### 6.4 Alur Purifikasi Harta (Bunga Bank)
+## 7. Edge Functions & AI Integration
+### 7.1 Scan Struk — Gemini Vision
+### 7.2 AI Insight Syariah — Gemini Text
+### 7.3 AI Nudge Split Bill — Gemini Text
+## 8. Offline-First Architecture
+### Service Worker Strategy
+### IndexedDB Schema
+### Conflict Resolution
+## 9. Authentication & Authorization
+### Auth Flow
+### Supabase Auth Client Setup
+### Middleware Auth Guard
+## 10. API Specification
+### Konvensi Response
+### Konvensi Error Code
+### `GET /api/transactions`
+### `POST /api/transactions`
+### `POST /api/scan`
+### `POST /api/split-sessions`
+### `POST /api/split-sessions/:id/nudge`
+### `GET /api/zakat/calculate`
+### `GET /api/reports/monthly`
+## 11. Real-Time Subscription
+## 12. Error Handling & Fallback
+### Hierarchy Error Handling
+### AI Fallback Strategy
+### Offline Fallback Strategy
+## 13. Performance Constraints
+### Target Performa
+### Optimasi yang Diterapkan
+## 14. Dokumen Terkait
+# 📋 BUSINESS_RULES.md — Tracki
+## Daftar Isi
+## 1. Identitas & Posisi Produk
+### 1.1 Apa Itu Tracki?
+### 1.2 Apa yang Tracki BUKAN
+### 1.3 Tiga Pilar Produk
+## 2. Aturan Pengguna & Akun
+### 2.1 Eligibilitas Pengguna & Batas Usia
+### 2.2 Satu Akun Per Pengguna
+### 2.3 Hapus Akun
+## 3. Fitur AI-01 — Scan Struk
+### 3.1 Deskripsi Fitur
+### 3.2 Aturan Input
+### 3.3 Aturan Output & Status Hasil
+### 3.4 Aturan Penyimpanan — Human-in-the-Loop Wajib
+### 3.5 Pencatatan Koreksi (Feedback Loop)
+### 3.6 Fallback saat AI Gagal
+### 3.7 Penanganan Transaksi Mata Uang Asing
+## 4. Fitur AI-02 — Insight Syariah
+### 4.1 Deskripsi Fitur
+### 4.2 Kapan Insight Diperbarui
+### 4.3 Data yang Dikirim ke AI — Prinsip Minimisasi
+### 4.4 Aturan Klasifikasi Syariah
+### 4.5 Disclaimer — Non-Negotiable
+### 4.6 Batas Penggunaan
+### 4.7 Fallback saat AI Gagal
+### 4.8 Mekanisme Sanggah Label AI
+## 5. Fitur AI-03 — Split Bill & AI Nudge
+### 5.1 Deskripsi Fitur
+### 5.2 Aturan Pembagian Tagihan
+### 5.3 Aturan Input Nama Anggota
+### 5.4 Aturan AI Nudge
+### 5.5 Semantic Caching untuk Nudge
+### 5.6 Batas Penggunaan
+### 5.7 Fallback saat AI Gagal
+## 6. Fitur Zakat
+### 6.1 Deskripsi Fitur
+### 6.2 Nisab & Haul — Definisi Bisnis
+### 6.3 Aturan Kalkulasi
+### 6.4 Batas Tanggung Jawab Fitur Zakat
+### 6.5 Sumber Data Referensi & Otoritas Acuan
+### 6.6 Kebijakan Amil & Penyaluran Zakat
+## 7. Klasifikasi Kategori Syariah
+### 7.1 Label Resmi dan Definisi
+### 7.2 Kategori Pengeluaran
+### 7.3 Prioritas Label
+### 7.4 Contoh Klasifikasi per Skenario
+### 7.5 Aturan Khusus: Mixed-Use Transaction
+## 8. Aturan Consent & Persetujuan Pengguna
+### 8.1 Prinsip Consent di Tracki
+### 8.2 Matriks Consent per Fitur
+### 8.3 Alur Pemberian Consent
+### 8.4 Pencabutan Consent
+### 8.5 Consent Tidak Bisa Diwakilkan
+## 9. Batas Penggunaan & Rate Limiting
+### 9.1 Tabel Rate Limit per Fitur
+### 9.2 Perilaku saat Rate Limit Tercapai
+### 9.3 Pengecualian Rate Limit
+## 10. Batas Tanggung Jawab Platform
+### 10.1 Pernyataan Resmi
+### 10.2 Tiga Lapisan Perlindungan Teknis
+### 10.3 Teks Legal untuk Terms of Service
+### 10.4 Kondisi yang Meningkatkan Risiko Tanggung Jawab
+## 11. Aturan Data & Privasi Pengguna
+### 11.1 Data yang Dikumpulkan
+### 11.2 Data yang TIDAK Boleh Masuk ke AI
+### 11.3 Retensi Data & Klarifikasi Gambar Struk
+### 11.4 Hak Pengguna atas Datanya
+## 12. Kebijakan Konten AI
+### 12.1 Konten yang WAJIB Ada di Setiap Output AI Syariah
+### 12.2 Konten yang DILARANG Diproduksi oleh AI Tracki
+### 12.3 Insiden Konten AI
+### 12.4 Pemantauan Kualitas Berkala
+## 13. Glosarium
+## 14. Dokumen Terkait
+# 🔒 COMPLIANCE.md — Tracki
+## Daftar Isi
+## 1. Pendahuluan & Ruang Lingkup
+### 1.1 Komitmen Privasi
+### 1.2 Ruang Lingkup
+## 2. Data yang Dikumpulkan
+### 2.1 Data yang Diberikan Langsung oleh Pengguna
+### 2.2 Data yang Dikumpulkan Secara Otomatis
+### 2.3 Data yang TIDAK Dikumpulkan
+## 3. Tujuan Pemrosesan Data
+### 3.1 Mekanisme Persetujuan Eksplisit — Fitur Scan AI
+### 3.2 Penggunaan Data Teranonimkan untuk Riset & Pengembangan
+## 4. Privacy-by-Design — Implementasi Teknis
+### 4.1 Ephemeral Processing — Gambar Struk
+### 4.2 Row Level Security (RLS) — Isolasi Data Pengguna
+### 4.3 API Key — Tidak Pernah Menyentuh Browser
+### 4.4 Autentikasi — HTTP-only Cookie
+### 4.5 Shared Cache — Tanpa Data Pribadi
+## 5. Data Retention Policy
+### 5.1 Tabel Retensi Data
+### 5.2 Penghapusan Cascade
+### 5.3 Retensi Data Minimal untuk Audit
+## 6. Hak Pengguna
+### 6.1 Hak Akses Data
+### 6.2 Hak Koreksi Data
+### 6.3 Hak Penghapusan Data (Right to be Forgotten)
+### 6.4 Hak Portabilitas Data
+### 6.5 Hak Pembatasan Pemrosesan
+### 6.6 Hak Keberatan
+## 7. Third-Party Data Sharing
+### 7.1 Daftar Third-Party Penerima Data
+### 7.2 Kontrol atas Data ke Gemini (Google)
+### 7.3 Data Processor Agreement
+## 8. Keamanan Data
+### 8.1 Enkripsi
+### 8.2 Access Control
+### 8.3 Vulnerability Management
+## 9. Cookies & Storage Lokal
+### 9.1 Cookies yang Digunakan
+### 9.2 IndexedDB (Penyimpanan Lokal Offline)
+### 9.3 Service Worker Cache
+## 10. Kebijakan Anak di Bawah Umur
+## 11. Kepatuhan Regulasi
+### 11.1 Regulasi Indonesia — UU PDP (UU No. 27 Tahun 2022)
+### 11.2 Standar Internasional — GDPR (referensi)
+### 11.3 Keamanan Pembayaran
+## 12. Incident Response & Notifikasi Pelanggaran
+### 12.1 Definisi Insiden Privasi
+### 12.2 Prosedur Respons Insiden
+### 12.3 Konten Notifikasi ke Pengguna
+### 12.4 Logging & Audit Trail
+## 13. Perubahan Kebijakan
+### 13.1 Prosedur Perubahan
+### 13.2 Riwayat Versi
+## 14. Kontak & DPO
+## 15. Dokumen Terkait
+# 🛠️ DEV_GUIDE.md — Tracki
+## Daftar Isi
+## 1. Prasyarat & Tech Stack
+### 1.1 Tools Wajib
+# Cek versi yang terinstal
+### 1.2 Tech Stack Ringkas
+## 2. Setup Lokal
+### 2.1 Clone & Install Dependensi
+### 2.2 Setup Supabase Lokal
+# Jalankan Supabase secara lokal (membutuhkan Docker)
+# Output yang diharapkan:
+# API URL:     http://localhost:54321
+# DB URL:      postgresql://postgres:postgres@localhost:54322/postgres
+# Studio URL:  http://localhost:54323
+# Anon key:    eyJhbGciOiJ...
+# Service key: eyJhbGciOiJ...
+### 2.3 Jalankan Migrasi Database
+# Terapkan semua migrasi yang ada (termasuk tabel AI)
+# Atau untuk development interaktif
+### 2.4 Setup Environment Variables
+# Salin template
+# Edit .env.local dan isi semua value yang diperlukan
+# (lihat Bagian 4 untuk daftar lengkap)
+### 2.5 Jalankan Development Server
+# Aplikasi berjalan di http://localhost:3000
+### 2.6 Verifikasi Setup
+## 3. Struktur Direktori Proyek
+## 4. Environment Variables
+### 4.1 Daftar Lengkap Variables
+# ─────────────────────────────────────────────
+# SUPABASE
+# ─────────────────────────────────────────────
+# ⚠️ SERVICE ROLE KEY — HANYA untuk server-side, JANGAN expose ke client
+# ─────────────────────────────────────────────
+# AI — GOOGLE GEMINI
+# ─────────────────────────────────────────────
+# ⚠️ HANYA server-side — tidak boleh ada prefix NEXT_PUBLIC_
+# ─────────────────────────────────────────────
+# CACHE & RATE LIMITING — UPSTASH REDIS
+# ─────────────────────────────────────────────
+# ⚠️ HANYA server-side
+# ─────────────────────────────────────────────
+# GOLD PRICE API (opsional di development)
+# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────
+# APP CONFIG
+# ─────────────────────────────────────────────
+### 4.2 Aturan Ketat Environment Variables
+# Cari file yang mungkin mengekspos variable sensitif
+# Tidak boleh ada output dari perintah ini
+### 4.3 Environment untuk Staging & Production
+## 5. Coding Standards
+### 5.1 TypeScript
+### 5.2 Penamaan
+### 5.3 Struktur Fungsi & File
+### 5.4 Penanganan Error
+### 5.5 Komentar & Dokumentasi
+### 5.6 Formatting
+## 6. Panduan Pengembangan Fitur AI
+### 6.1 Checklist Sebelum Menambah Fitur AI Baru
+### 6.2 Alur Wajib Setiap Pemanggilan AI
+### 6.3 Mengelola Prompt
+### 6.4 Menangani Partial Success di Frontend
+### 6.5 Disclaimer Syariah — Aturan Tampilan
+### 6.6 Etika AI & Threshold Kepercayaan Syariah
+### 6.7 Keamanan Prompt Injection
+### 6.8 Fallback & Degradasi Bertahap
+### 7.1 Membuat Migrasi Baru
+# Buat file migrasi baru
+# Contoh
+### 7.2 Konvensi Penulisan SQL Migrasi
+### 7.3 Tabel yang Memerlukan RLS
+### 7.4 Generate Types setelah Migrasi
+## 8. Testing Strategy
+### 8.1 Filosofi Testing
+### 8.2 Menjalankan Tests
+### 8.3 Struktur Test File
+### 8.4 Contoh Test untuk Logika AI Kritis
+### 8.5 Mocking Gemini API di Tests
+### 8.6 Coverage Requirements
+## 9. Git Workflow
+### 9.1 Branch Strategy
+### 9.2 Konvensi Commit Message
+### 9.3 Pull Request
+## Apa yang diubah?
+## Mengapa?
+## Dampak
+## Testing
+## Screenshot (jika ada perubahan UI)
+### 9.4 Code Review Guidelines
+## 10. Deployment
+### 10.1 Environment
+### 10.2 Alur Deployment Production
+### 10.3 Konfigurasi Edge Functions
+### 10.4 Database Migrasi di Production
+# Deploy migrasi ke production
+# Verifikasi migrasi berhasil
+## 11. Checklist Sebelum Merge
+### 11.1 Checklist Umum
+### 11.2 Checklist Khusus AI
+### 11.3 Checklist Khusus Database
+### 11.4 Sub-bab: AI Ethics & Accuracy Disclaimer
+#### Prinsip Dasar
+#### Teks Disclaimer Resmi
+#### Aturan Tampilan Disclaimer
+#### Monitoring Akurasi
+## 12. Troubleshooting Umum
+### Supabase lokal tidak bisa distart
+# Cek apakah Docker berjalan
+# Restart Supabase
+# Jika masih gagal, reset docker volumes
+### Gemini API error di development
+# Stop server (Ctrl+C), lalu restart
+### Rate limit Redis tidak reset di development
+# Via Upstash Console, atau gunakan script ini
+### TypeScript error setelah migrasi database
+### Test gagal karena mock Gemini tidak terkonfigurasi
+### Scan OCR lambat (>10 detik)
+## 13. Dokumen Terkait
+# 🔒 SECURITY.md — Tracki
+## Daftar Isi
+## 1. Prinsip Keamanan Dasar
+### 1.1 Pilar Utama
+### 1.2 Scope Dokumen Ini
+## 2. Keamanan API Key & Secret Management
+### 2.1 Klasifikasi Secret
+### 2.2 Aturan Wajib
+# ❌ Menambahkan prefix NEXT_PUBLIC_ pada secret
+# ❌ Hardcode secret di dalam kode
+# ❌ Meng-commit file .env
+# Script verifikasi — tidak boleh ada output
+### 2.3 Rotasi Secret
+### 2.4 `.gitignore` Wajib
+# Environment files — JANGAN PERNAH COMMIT
+## 3. Keamanan AI & Prompt Injection
+### 3.1 Apa Itu Prompt Injection?
+### 3.2 Vektor Serangan di Tracki
+### 3.3 Implementasi Sanitasi
+### 3.4 Mitigasi Halusinasi & Etika Nasihat Syariah
+#### Parameter `uncertainty_handling` pada Prompt Insight
+#### Tabel Confidence → Label → UI
+#### Disclaimer Wajib — Aturan Tampilan
+### 3.5 Confidence Threshold — Ringkasan Enforcement
+## 4. Autentikasi & Otorisasi
+### 4.1 Supabase Auth
+### 4.2 Consent sebagai Lapis Otorisasi Kedua
+### 4.3 Urutan Pemeriksaan Wajib
+## 5. Keamanan Database (Row Level Security)
+### 5.1 Prinsip RLS di Tracki
+### 5.2 Konfigurasi RLS per Tabel
+### 5.3 Template Migrasi dengan RLS
+### 5.4 Verifikasi RLS
+### 5.5 Human-in-the-Loop: Kolom Koreksi AI
+## 6. Perlindungan Data Pribadi (PII)
+### 6.1 Definisi PII di Konteks Tracki
+### 6.2 PII Filter — Wajib Sebelum Kirim ke AI
+### 6.3 Notes Scrubbing — Aturan Khusus dan Wajib
+### 6.4 Human-in-the-Loop: Koreksi & Feedback Loop
+### 6.5 Logging Tanpa PII
+## 7. Keamanan Input & Output
+### 7.1 Validasi Input dengan Zod
+### 7.2 Image Pre-processing (Sebelum Upload)
+### 7.3 Output Validation dari AI
+## 8. Rate Limiting & Proteksi DDoS
+### 8.1 Arsitektur Rate Limiting
+### 8.2 Response Rate Limit
+### 8.3 Vercel Edge Protection
+## 9. Keamanan Edge Functions & API Routes
+### 9.1 Konfigurasi Wajib
+### 9.2 CORS & Headers Keamanan
+### 9.3 Tidak Ada Secret di Client Bundle
+# Build produksi
+# Cek bundle untuk secret (ganti dengan prefix key Anda)
+# Tidak boleh ada output dari perintah ini
+### 9.4 Fallback Aman saat Gemini API Gagal
+## 10. Monitoring & Logging Aman
+### 10.1 Apa yang Boleh dan Tidak Boleh Di-log
+### 10.2 Struktur AICallLog
+### 10.3 Audit Log AI Quality
+### 10.4 Alert & Threshold
+## 11. Incident Response
+### 11.1 Klasifikasi Insiden
+### 11.2 Prosedur Respons P0 & P1
+### 11.3 Template Post-Mortem
+## Post-Mortem: [Judul Insiden]
+### Timeline
+### Root Cause
+### Dampak
+### Tindakan Perbaikan
+### Lessons Learned
+### 11.4 Tanggung Jawab Konten AI
+#### Prinsip Dasar
+#### Implementasi Teknis Batas Tanggung Jawab
+#### Teks Batas Tanggung Jawab (untuk Terms of Service)
+#### Insiden Terkait Konten AI
+### 11.5 Kontak Darurat
+## 12. Security Checklist untuk Developer
+### 12.1 Checklist Secret & Credential
+### 12.2 Checklist AI & Prompt Security
+### 12.3 Checklist Auth & Database
+### 12.4 Checklist Logging & Monitoring
+## 13. Dokumen Terkait
