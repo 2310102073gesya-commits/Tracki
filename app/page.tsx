@@ -205,30 +205,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      
-      <style dangerouslySetInnerHTML={{__html: `
-        @media (max-width: 768px) {
-          .login-container {
-            flex-direction: column !important;
-          }
-          .login-quote-side {
-            flex: none !important;
-            padding: 40px 20px !important;
-            min-height: auto;
-          }
-          .quote-text {
-            font-size: 20px !important;
-          }
-          .login-form-side {
-            padding: 30px 20px !important;
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            margin-top: -20px;
-            z-index: 10;
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.03);
-          }
-        }
-      `}} />
     </div>
   );
 }
