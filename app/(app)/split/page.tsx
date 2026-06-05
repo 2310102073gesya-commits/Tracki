@@ -35,7 +35,7 @@ export default function SplitPage() {
   const handleAddMember = () => {
     if (!newName.trim()) return;
     const grads = ['linear-gradient(135deg,#f472b6,#ec4899)','linear-gradient(135deg,#60a5fa,#3b82f6)','linear-gradient(135deg,#fb923c,#ea580c)','linear-gradient(135deg,#a78bfa,#7c3aed)','linear-gradient(135deg,#34d399,#059669)'];
-    const g = grads[Math.floor(Math.random()*grads.length)];
+    const g = grads[newName.length % grads.length];
     const init = newName.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || 'US';
     setMembers([...members, { 
       id: Date.now().toString(), 
