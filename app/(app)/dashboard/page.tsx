@@ -30,7 +30,8 @@ export default function DashboardPage() {
   const expensesByCategory = transactions
     .filter(t => t.type === 'pengeluaran')
     .reduce((acc, t) => {
-      acc[t.category] = (acc[t.category] || 0) + t.amount;
+      const cat = t.category || 'Lainnya';
+      acc[cat] = (acc[cat] || 0) + t.amount;
       return acc;
     }, {} as Record<string, number>);
 
