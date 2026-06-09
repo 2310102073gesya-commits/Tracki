@@ -9,6 +9,57 @@ export default function DashboardPage() {
 
   const formatMoney = (num: number) => `Rp ${num.toLocaleString('id-ID')}`;
 
+  // Calculate Bar Chart (Last 5 Days)
+  const today = new Date();
+  const last5Days = Array.from({ length: 5 }).map((_, i) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - (4 - i));
+    return d;
+  });
+
+  const dailyExpenses = last5Days.map(date => {
+    const dayStr = date.toLocaleDateString('id-ID', { weekday: 'short' });
+    const total = transactions
+      .filter(t => t.type === 'pengeluaran' && new Date(t.date).toDateString() === date.toDateString())
+      .reduce((sum, t) => sum + t.amount, 0);
+    return { day: dayStr, total };
+  });
+  const maxExpense = Math.max(...dailyExpenses.map(d => d.total), 10000); // minimum scale
+
+  // Calculate Donut Chart (Top Categories)
+  const expensesByCategory = transactions
+    .filter(t => t.type === 'pengeluaran')
+    .reduce((acc, t) => {
+      acc[t.category] = (acc[t.category] || 0) + t.amount;
+      return acc;
+    }, {} as Record<string, number>);
+
+  const totalExpenseForDonut = Object.values(expensesByCategory).reduce((a, b) => a + b, 0) || 1;
+  const donutColors = ['#ef4444', '#3b82f6', '#ec4899', '#8b5cf6', '#f97316', '#10b981'];
+  
+  let currentPct = 0;
+  const donutSlices = Object.entries(expensesByCategory)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5) // max 5 slices
+    .map((entry, index) => {
+      const pct = Math.round((entry[1] / totalExpenseForDonut) * 100);
+      const startPct = currentPct;
+      currentPct += pct;
+      return {
+        name: entry[0],
+        pct,
+        color: donutColors[index]
+      };
+    });
+
+  let gradientAcc = 0;
+  const conicStrs = donutSlices.map(slice => {
+    const start = gradientAcc;
+    gradientAcc += slice.pct;
+    return `${slice.color} ${start}% ${gradientAcc}%`;
+  });
+  const conicGradient = conicStrs.length > 0 ? `conic-gradient(${conicStrs.join(', ')})` : 'conic-gradient(#e2e8f0 0% 100%)';
+
   if (!isLoaded) return null;
 
   return (
@@ -56,27 +107,36 @@ export default function DashboardPage() {
         <div className="card">
           <div className="card-title">Tren Pengeluaran — Hari Ini <a>Detail →</a></div>
           <div className="chart-wrap" id="bar-chart">
-            <div className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: '40%' }}></div>
-            <div className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: '60%' }}></div>
-            <div className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: '80%' }}></div>
-            <div className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: '50%' }}></div>
-            <div className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: '90%' }}></div>
+            {dailyExpenses.map((day, i) => {
+              const heightPct = Math.max((day.total / maxExpense) * 100, 5); // minimum 5% height
+              return (
+                <div key={i} className="bar-col" style={{ background: 'linear-gradient(to top,var(--pink),var(--pink2))', height: `${heightPct}%` }} title={formatMoney(day.total)}></div>
+              );
+            })}
           </div>
           <div className="bar-labels" id="bar-labels">
-            <div className="bar-label">Min</div><div className="bar-label">Sen</div><div className="bar-label">Sel</div><div className="bar-label">Rab</div><div className="bar-label">Kam</div>
+            {dailyExpenses.map((day, i) => (
+              <div key={i} className="bar-label">{day.day}</div>
+            ))}
           </div>
         </div>
 
         <div className="card">
           <div className="card-title">Breakdown Kategori</div>
           <div className="donut-wrap">
-            <div style={{ width: '120px', height: '120px', flexShrink: 0, borderRadius: '50%', background: 'conic-gradient(#ef4444 38%, #3b82f6 0 60%, #ec4899 0 78%, #8b5cf6 0 92%, #f97316 0 100%)' }}></div>
+            <div style={{ width: '120px', height: '120px', flexShrink: 0, borderRadius: '50%', background: conicGradient }}></div>
             <div className="legend">
-              <div className="legend-row"><div className="legend-dot" style={{ background: '#ef4444' }}></div><span className="legend-name">Makan &amp; Minum</span><span className="legend-pct">38%</span></div>
-              <div className="legend-row"><div className="legend-dot" style={{ background: '#3b82f6' }}></div><span className="legend-name">Transport</span><span className="legend-pct">22%</span></div>
-              <div className="legend-row"><div className="legend-dot" style={{ background: '#ec4899' }}></div><span className="legend-name">Belanja</span><span className="legend-pct">18%</span></div>
-              <div className="legend-row"><div className="legend-dot" style={{ background: '#8b5cf6' }}></div><span className="legend-name">Hiburan</span><span className="legend-pct">14%</span></div>
-              <div className="legend-row"><div className="legend-dot" style={{ background: '#f97316' }}></div><span className="legend-name">Lainnya</span><span className="legend-pct">8%</span></div>
+              {donutSlices.length > 0 ? (
+                donutSlices.map((slice, i) => (
+                  <div key={i} className="legend-row">
+                    <div className="legend-dot" style={{ background: slice.color }}></div>
+                    <span className="legend-name">{slice.name}</span>
+                    <span className="legend-pct">{slice.pct}%</span>
+                  </div>
+                ))
+              ) : (
+                <div className="legend-row"><span className="legend-name" style={{ color: 'var(--muted)' }}>Belum ada pengeluaran</span></div>
+              )}
             </div>
           </div>
         </div>
