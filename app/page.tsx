@@ -110,19 +110,15 @@ export default function LoginPage() {
         <div style={{ maxWidth: '380px', width: '100%' }}>
           
           <div style={{ marginBottom: '32px' }}>
-            <div style={{ 
-              width: '56px', height: '56px', borderRadius: '16px', 
-              background: 'linear-gradient(135deg, #fdf2f8, #e0e7ff)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '32px', boxShadow: '0 10px 25px -5px rgba(219,39,119,0.15)',
-              marginBottom: '20px',
-              fontFamily: 'var(--font-head)',
-              color: '#db2777',
-              fontWeight: 800,
-              border: '2px solid rgba(255,255,255,0.6)'
-            }}>
-              T
-            </div>
+            <img 
+              src="/logotracki.png" 
+              alt="Tracki Logo" 
+              style={{ 
+                width: '72px', height: '72px', borderRadius: '18px', 
+                marginBottom: '20px', boxShadow: '0 10px 25px -5px rgba(219,39,119,0.2)',
+                objectFit: 'cover'
+              }} 
+            />
             <h1 style={{ fontFamily: 'var(--font-head)', fontSize: '32px', fontWeight: 800, color: '#111827', margin: '0 0 8px 0', letterSpacing: '-1px' }}>Tracki</h1>
             <p style={{ color: '#6b7280', fontSize: '15px', margin: 0 }}>Masuk untuk mengelola keuangan cerdas & islami.</p>
           </div>

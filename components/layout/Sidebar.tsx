@@ -45,7 +45,7 @@ export default function Sidebar() {
   return (
     <div className="sidebar">
       <div className="logo">
-        <div className="logo-mark">T</div>
+        <img src="/logotracki.png" alt="Tracki" style={{ width: '38px', height: '38px', borderRadius: '10px', objectFit: 'cover', boxShadow: '0 4px 12px rgba(236,72,153,0.15)' }} />
         <div className="logo-name">tracki</div>
       </div>
 

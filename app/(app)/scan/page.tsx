@@ -23,21 +23,19 @@ export default function ScanPage() {
       const formData = new FormData();
       formData.append('image', file);
 
-      // Simulasi proses scan AI untuk MVP (karena belum ada API key)
-      await new Promise(resolve => setTimeout(resolve, 2500));
+      // Panggil API sungguhan ke server
+      const response = await fetch('/api/scan', {
+        method: 'POST',
+        body: formData,
+      });
       
-      const mockResult = {
-        merchant: 'Kopi Kenangan',
-        address: 'Cabang Sudirman, Jakarta',
-        date: new Date().toLocaleDateString('id-ID'),
-        items: [
-          { name: 'Kopi Kenangan Mantan', qty: 2, price: 'Rp 36.000' },
-          { name: 'Roti Daging Asap', qty: 1, price: 'Rp 14.000' }
-        ],
-        total: 'Rp 50.000'
-      };
+      const resultData = await response.json();
       
-      setResult(mockResult);
+      if (!response.ok) {
+        throw new Error(resultData.error || 'Gagal memproses struk');
+      }
+      
+      setResult(resultData.data);
     } catch (err: any) {
       console.error(err);
       alert('Error: ' + err.message);
