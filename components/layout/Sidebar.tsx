@@ -30,7 +30,6 @@ export default function Sidebar() {
     { name: 'Dashboard', path: '/dashboard', icon: '📊' },
     { name: 'Transaksi', path: '/transactions', icon: '✏️' },
     { name: 'Catat Cepat AI', path: '/quick', icon: '⚡' },
-    { name: 'Asisten Chat AI', path: '/chat', icon: '💬' },
     { name: 'Split Bill', path: '/split', icon: '🤝' },
     { name: 'Laporan Bulanan', path: '/laporan', icon: '📋' },
     { name: 'Zakat & Syariah', path: '/insight', icon: '🌙', isSyariah: true },
