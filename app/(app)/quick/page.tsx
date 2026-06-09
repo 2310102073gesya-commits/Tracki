@@ -1,5 +1,5 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTransactions } from '@/lib/hooks/useTransactions';
 
@@ -9,6 +9,7 @@ export default function QuickInputPage() {
   const { addTransaction } = useTransactions();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<any>(null);
 
   const processText = async () => {
     if (!text.trim()) return;
@@ -76,6 +77,7 @@ export default function QuickInputPage() {
                 style={{ resize: 'none', paddingRight: '50px' }}
                 disabled={loading}
               />
+            </div>
 
             <button 
               className="btn btn-primary" 
