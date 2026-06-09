@@ -2,8 +2,24 @@
 import { useTransactions } from '@/lib/hooks/useTransactions';
 import Link from 'next/link';
 
+import { useState, useEffect } from 'react';
+
 export default function DashboardPage() {
   const { transactions, getSummary, isLoaded } = useTransactions();
+  const [hasSplitSession, setHasSplitSession] = useState(false);
+
+  useEffect(() => {
+    const splitData = localStorage.getItem('split_data');
+    if (splitData) {
+      try {
+        const data = JSON.parse(splitData);
+        // Cek jika ada item atau total lebih dari 0
+        if (data && (data.total !== 'Rp 0' || (data.items && data.items.length > 0))) {
+          setHasSplitSession(true);
+        }
+      } catch(e) {}
+    }
+  }, []);
   const summary = getSummary();
   const recentTransactions = transactions.slice(0, 5);
 
@@ -87,8 +103,8 @@ export default function DashboardPage() {
         <div className="stat-card">
           <div className="stat-emoji">🤝</div>
           <div className="stat-label">Split Bill</div>
-          <div className="stat-value purple">1 Sesi</div>
-          <div className="stat-change ok">Aktif</div>
+          <div className="stat-value purple">{hasSplitSession ? '1 Sesi' : '0 Sesi'}</div>
+          <div className="stat-change ok">{hasSplitSession ? 'Aktif' : 'Kosong'}</div>
         </div>
       </div>
 
