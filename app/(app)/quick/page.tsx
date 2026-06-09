@@ -102,7 +102,7 @@ export default function QuickInputPage() {
         amount: result.amount,
         type: result.type,
         category: result.category,
-        syariahLabel: result.type === 'pengeluaran' ? 'Halal' : 'Semua' // Default to Halal for expenses
+        syariahLabel: result.type === 'pengeluaran' ? '✓ Halal' : 'Semua'
       });
       
       // Reset form
