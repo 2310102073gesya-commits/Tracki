@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       // Fallback Darurat jika server Google Overload (503) atau error lainnya
       return NextResponse.json({ 
         success: true, 
-        reply: "🙏 Mohon maaf kak, server AI saya saat ini sedang sangat sibuk melayani banyak pengguna. Boleh dicoba lagi sekitar 1 menit kemudian ya? InsyaAllah saya akan siap membantu target keuangan kakak lagi!"
+        reply: "🙏 Mohon maaf kak, sistem mendeteksi error dari Google: " + (aiError.message || JSON.stringify(aiError))
       });
     }
 
