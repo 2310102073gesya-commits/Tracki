@@ -5,5 +5,5 @@ const apiKey = process.env.GEMINI_API_KEY || '';
 export const genAI = new GoogleGenerativeAI(apiKey);
 
 export const getVisionModel = () => {
-  return genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  return genAI.getGenerativeModel({ model: "gemini-pro" });
 };
