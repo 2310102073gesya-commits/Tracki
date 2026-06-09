@@ -11,7 +11,8 @@ export default function InsightPage() {
   const summary = getSummary();
   const formatMoney = (num: number) => `Rp ${num.toLocaleString('id-ID')}`;
 
-  const nisabTarget = 6100000;
+  // Asumsi harga emas Rp 1.400.000 / gram (2026) -> 85 gram = 119.000.000
+  const nisabTarget = 119000000;
   const isNisabReached = summary.balance >= nisabTarget;
   const zakatWajib = isNisabReached ? summary.balance * 0.025 : 0;
   const nisabPct = Math.min(100, Math.round((summary.balance / nisabTarget) * 100));
