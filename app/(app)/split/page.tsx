@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-const parseMoney = (str: string) => parseInt(String(str).replace(/[^0-9]/g, '')) || 0;
+const parseMoney = (str: string) => Number.parseInt(String(str).replace(/[^0-9]/g, ''), 10) || 0;
 const formatMoney = (num: number) => `Rp ${num.toLocaleString('id-ID')}`;
 
 export default function SplitPage() {
@@ -150,7 +150,7 @@ export default function SplitPage() {
                   {m.role === 'Host' ? (
                     <span className="badge badge-pink">Host</span>
                   ) : (
-                    <span style={{ fontSize: '12px', cursor: 'pointer', color: 'var(--red)' }} onClick={() => handleRemoveMember(m.id)}>✕ Hapus</span>
+                    <button type="button" style={{ fontSize: '12px', cursor: 'pointer', color: 'var(--red)', background: 'none', border: 'none', padding: 0 }} onClick={() => handleRemoveMember(m.id)}>✕ Hapus</button>
                   )}
                 </div>
               ))}

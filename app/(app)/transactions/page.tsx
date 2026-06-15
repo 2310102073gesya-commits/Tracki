@@ -14,7 +14,7 @@ export default function TransactionsPage() {
   const handleNominal = (e: any) => {
     const v = e.target.value.replace(/\D/g, '');
     if (v) {
-      setNominalStr('Rp ' + parseInt(v).toLocaleString('id-ID'));
+      setNominalStr('Rp ' + Number.parseInt(v, 10).toLocaleString('id-ID'));
     } else {
       setNominalStr('');
     }
@@ -22,7 +22,7 @@ export default function TransactionsPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const amount = parseInt(nominalStr.replace(/\D/g, ''), 10);
+    const amount = Number.parseInt(nominalStr.replace(/\D/g, ''), 10);
     if (!amount || !description) {
       alert('Harap isi nominal dan keterangan');
       return;
@@ -53,7 +53,7 @@ export default function TransactionsPage() {
           <div className="card" style={{ marginBottom: '14px' }}>
             <div className="card-title">Detail Transaksi</div>
             <div className="form-group">
-              <label className="form-label">Jenis</label>
+              <span className="form-label">Jenis</span>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button 
                   type="button"
@@ -70,17 +70,17 @@ export default function TransactionsPage() {
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Nominal</label>
-              <input required className="form-input" type="text" placeholder="Rp 0" value={nominalStr} onChange={handleNominal} />
+              <label htmlFor="nominal" className="form-label">Nominal</label>
+              <input id="nominal" required className="form-input" type="text" placeholder="Rp 0" value={nominalStr} onChange={handleNominal} />
             </div>
             <div className="form-group">
-              <label className="form-label">Keterangan</label>
-              <input required className="form-input" type="text" placeholder="Contoh: Makan siang warteg halal" value={description} onChange={e => setDescription(e.target.value)} />
+              <label htmlFor="keterangan" className="form-label">Keterangan</label>
+              <input id="keterangan" required className="form-input" type="text" placeholder="Contoh: Makan siang warteg halal" value={description} onChange={e => setDescription(e.target.value)} />
             </div>
 
             {jenis === 'pengeluaran' && (
               <div className="form-group">
-                <label className="form-label">🌙 Status Syariah</label>
+                <span className="form-label">🌙 Status Syariah</span>
                 <div className="halal-filter">
                   <div className={`halal-btn ${halal === '✓ Halal' ? 'active-halal' : ''}`} onClick={() => setHalal('✓ Halal')}>✓ Halal</div>
                   <div className={`halal-btn ${halal === '⚠️ Syubhat' ? 'active-syubhat' : ''}`} onClick={() => setHalal('⚠️ Syubhat')} style={halal === '⚠️ Syubhat' ? { borderColor: 'var(--gold)', background: 'var(--gold-dim)', color: 'var(--gold)', fontWeight: 700 } : {}}>⚠️ Syubhat</div>

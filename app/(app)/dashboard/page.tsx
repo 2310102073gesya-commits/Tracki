@@ -122,7 +122,7 @@ export default function DashboardPage() {
 
       <div className="g2">
         <div className="card">
-          <div className="card-title">Tren Pengeluaran — Hari Ini <a>Detail →</a></div>
+          <div className="card-title">Tren Pengeluaran — Hari Ini <Link href="/transactions">Detail →</Link></div>
           <div className="chart-wrap" id="bar-chart">
             {dailyExpenses.map((day, i) => {
               const heightPct = Math.max((day.total / maxExpense) * 100, 5); // minimum 5% height

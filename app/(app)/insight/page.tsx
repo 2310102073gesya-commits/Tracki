@@ -116,7 +116,7 @@ export default function InsightPage() {
             <div className="card-title">🌙 Filter Transaksi Syariah</div>
             <div className="filter-row">
               {['Semua', '✓ Halal', '⚠️ Syubhat', '✗ Haram'].map(f => (
-                <div key={f} className={`filter-chip ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>{f}</div>
+                <div key={f} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFilter(f); }} className={`filter-chip ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>{f}</div>
               ))}
             </div>
             {transactions.filter(t => t.type === 'pengeluaran').length === 0 ? (
