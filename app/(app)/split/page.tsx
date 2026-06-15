@@ -161,7 +161,7 @@ export default function SplitPage() {
             <div className="card-title">Metode Split</div>
             <div className="tabs">
               {['Rata Sama', 'Per Item', 'Custom %'].map(t => (
-                <div key={t} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>{t}</div>
+                <div key={t} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setTab(t); }} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>{t}</div>
               ))}
             </div>
             

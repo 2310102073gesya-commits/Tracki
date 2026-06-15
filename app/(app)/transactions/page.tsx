@@ -82,10 +82,10 @@ export default function TransactionsPage() {
               <div className="form-group">
                 <span className="form-label">🌙 Status Syariah</span>
                 <div className="halal-filter">
-                  <div className={`halal-btn ${halal === '✓ Halal' ? 'active-halal' : ''}`} onClick={() => setHalal('✓ Halal')}>✓ Halal</div>
-                  <div className={`halal-btn ${halal === '⚠️ Syubhat' ? 'active-syubhat' : ''}`} onClick={() => setHalal('⚠️ Syubhat')} style={halal === '⚠️ Syubhat' ? { borderColor: 'var(--gold)', background: 'var(--gold-dim)', color: 'var(--gold)', fontWeight: 700 } : {}}>⚠️ Syubhat</div>
-                  <div className={`halal-btn ${halal === '✗ Haram' ? 'active-haram' : ''}`} onClick={() => setHalal('✗ Haram')}>✗ Haram</div>
-                  <div className={`halal-btn ${halal === '✓ Amal 🌟' ? 'active-halal' : ''}`} onClick={() => setHalal('✓ Amal 🌟')}>✓ Amal</div>
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setHalal('✓ Halal'); }} className={`halal-btn ${halal === '✓ Halal' ? 'active-halal' : ''}`} onClick={() => setHalal('✓ Halal')}>✓ Halal</div>
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setHalal('⚠️ Syubhat'); }} className={`halal-btn ${halal === '⚠️ Syubhat' ? 'active-syubhat' : ''}`} onClick={() => setHalal('⚠️ Syubhat')} style={halal === '⚠️ Syubhat' ? { borderColor: 'var(--gold)', background: 'var(--gold-dim)', color: 'var(--gold)', fontWeight: 700 } : {}}>⚠️ Syubhat</div>
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setHalal('✗ Haram'); }} className={`halal-btn ${halal === '✗ Haram' ? 'active-haram' : ''}`} onClick={() => setHalal('✗ Haram')}>✗ Haram</div>
+                  <div role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setHalal('✓ Amal 🌟'); }} className={`halal-btn ${halal === '✓ Amal 🌟' ? 'active-halal' : ''}`} onClick={() => setHalal('✓ Amal 🌟')}>✓ Amal</div>
                 </div>
               </div>
             )}
@@ -107,7 +107,12 @@ export default function TransactionsPage() {
                 { label: 'Sedekah', icon: '🕌' },
                 { label: 'Lainnya', icon: '➕' },
               ].map(cat => (
-                <div key={cat.label} className={`cat-btn ${kategori === cat.label ? 'selected' : ''}`} onClick={() => {
+                <div key={cat.label} role="button" tabIndex={0} onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    setKategori(cat.label);
+                    if (cat.label === 'Sedekah') setHalal('✓ Amal 🌟');
+                  }
+                }} className={`cat-btn ${kategori === cat.label ? 'selected' : ''}`} onClick={() => {
                   setKategori(cat.label);
                   if (cat.label === 'Sedekah') setHalal('✓ Amal 🌟');
                 }}>
@@ -130,7 +135,7 @@ export default function TransactionsPage() {
 
       <div className="card" style={{ marginTop: '24px' }}>
         <div className="card-title" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          Daftar Transaksi
+          <span>Daftar Transaksi</span>
           <select 
             value={filterMonth} 
             onChange={(e) => setFilterMonth(e.target.value)}
