@@ -69,7 +69,7 @@ export default function Sidebar() {
         <div className="sb-sub">Halal · Amanah · Berkah</div>
       </div>
 
-      <div className="user-card" onClick={handleLogout} style={{ cursor: 'pointer' }} title="Klik untuk Keluar">
+      <div className="user-card" onClick={handleLogout} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleLogout(); }} role="button" tabIndex={0} style={{ cursor: 'pointer' }} title="Klik untuk Keluar">
         <div className="user-avatar">{user.initials}</div>
         <div style={{ overflow: 'hidden' }}>
           <div className="user-name" style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>{user.name}</div>

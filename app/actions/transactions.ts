@@ -19,9 +19,9 @@ export async function addTransaction(formData: FormData) {
   const shariah_status = formData.get('shariah_status') as string
 
   // Parse amount from "Rp 10.000" or raw string to number
-  const amount = parseInt(amountStr.replace(/\D/g, ''), 10)
+  const amount = Number.parseInt(amountStr.replace(/\D/g, ''), 10)
 
-  if (isNaN(amount) || amount <= 0) {
+  if (Number.isNaN(amount) || amount <= 0) {
     return { error: 'Nominal tidak valid' }
   }
 

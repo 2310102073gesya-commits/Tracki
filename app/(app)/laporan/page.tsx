@@ -15,7 +15,7 @@ export default function LaporanPage() {
         const data = JSON.parse(splitData);
         if (data && (data.total !== 'Rp 0' || (data.items && data.items.length > 0))) {
           setSplitSesi(1);
-          setSplitPiutang(data.total !== 'Rp 0' ? parseInt(String(data.total).replace(/[^0-9]/g, '')) : 0);
+          setSplitPiutang(data.total !== 'Rp 0' ? Number.parseInt(String(data.total).replace(/[^0-9]/g, ''), 10) : 0);
         }
       } catch(e) {}
     }

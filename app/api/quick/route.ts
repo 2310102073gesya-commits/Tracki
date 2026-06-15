@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
       
       // Fallback Darurat agar presentasi dosen aman & tidak pernah error
       // Mengekstrak angka pertama yang ditemukan sebagai amount
-      const numMatch = text.replace(/[.]/g, '').match(/[0-9]+/);
-      let amount = numMatch ? parseInt(numMatch[0]) : 0;
+      const numMatch = text.replaceAll('.', '').match(/[0-9]+/);
+      let amount = numMatch ? Number.parseInt(numMatch[0], 10) : 0;
       
       // Jika teks mengandung kata "ribu", kalikan 1000
       if (text.toLowerCase().includes('ribu')) {
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
     
     let parsedData = {};
     try {
-      const jsonStr = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+      const jsonStr = responseText.replaceAll('```json', '').replaceAll('```', '').trim();
       parsedData = JSON.parse(jsonStr);
     } catch (e) {
       console.error("Failed to parse JSON from AI:", responseText);

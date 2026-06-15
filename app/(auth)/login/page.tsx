@@ -50,12 +50,12 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">Email</label>
-              <input name="email" type="email" required className="form-input" placeholder="nama@email.com" />
+              <label htmlFor="email" className="form-label">Email</label>
+              <input id="email" name="email" type="email" required className="form-input" placeholder="nama@email.com" />
             </div>
             <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">Password</label>
-              <input name="password" type="password" required className="form-input" placeholder="Minimal 6 karakter" minLength={6} />
+              <label htmlFor="password" className="form-label">Password</label>
+              <input id="password" name="password" type="password" required className="form-input" placeholder="Minimal 6 karakter" minLength={6} />
             </div>
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ width: '100%', justifyContent: 'center', marginTop: '8px', padding: '12px' }}>
               {loading ? 'Memproses...' : (isLogin ? 'Masuk' : 'Daftar')}
@@ -64,9 +64,9 @@ export default function LoginPage() {
 
           <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '13px', color: 'var(--muted)' }}>
             {isLogin ? "Belum punya akun? " : "Sudah punya akun? "}
-            <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); setError(null); }} style={{ color: 'var(--pink)', fontWeight: 600, textDecoration: 'none' }}>
+            <button type="button" onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); setError(null); }} style={{ color: 'var(--pink)', fontWeight: 600, textDecoration: 'none', background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit', fontSize: 'inherit' }}>
               {isLogin ? 'Daftar sekarang' : 'Masuk di sini'}
-            </a>
+            </button>
           </div>
         </div>
       </div>
