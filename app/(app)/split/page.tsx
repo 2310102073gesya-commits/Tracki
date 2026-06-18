@@ -32,6 +32,13 @@ export default function SplitPage() {
     }
   }, []);
 
+  useEffect(() => {
+    // Simpan ke localStorage setiap ada perubahan agar terbaca di Laporan/Dashboard
+    if (splitData.total !== 'Rp 0' || splitData.merchant !== 'Toko') {
+      localStorage.setItem('split_data', JSON.stringify(splitData));
+    }
+  }, [splitData]);
+
   const handleAddMember = () => {
     if (!newName.trim()) return;
     const grads = ['linear-gradient(135deg,#f472b6,#ec4899)','linear-gradient(135deg,#60a5fa,#3b82f6)','linear-gradient(135deg,#fb923c,#ea580c)','linear-gradient(135deg,#a78bfa,#7c3aed)','linear-gradient(135deg,#34d399,#059669)'];
