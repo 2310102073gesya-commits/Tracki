@@ -81,11 +81,11 @@ export default function LaporanPage() {
     
     // Assign colors
     let color = 'var(--blue)';
-    if (cat === 'Makan') color = 'var(--red)';
+    if (cat === 'Makan' || cat === 'Makanan') color = 'var(--red)';
     else if (cat === 'Belanja') color = 'var(--pink)';
     else if (cat === 'Hiburan') color = 'var(--purple)';
     else if (cat === 'Sedekah' || cat === 'Amal') color = 'var(--gold)';
-    else if (cat === 'Transport') color = 'var(--blue)';
+    else if (cat === 'Transport' || cat === 'Transportasi') color = 'var(--blue)';
     else color = 'var(--muted)';
 
     return { name: cat, amount, pct, color };

@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       Aturan ekstraksi:
       1. "name": Nama transaksi singkat dan jelas (string).
       2. "amount": Jumlah uang dalam bentuk angka integer positif (number). Jika ada kata "ribu", kalikan 1000. Contoh: "25 ribu" jadi 25000.
-      3. "category": Pilih salah satu kategori paling cocok dari list ini: ["Belanja", "Makanan", "Transportasi", "Tagihan", "Hiburan", "Gaji", "Zakat", "Sedekah", "Lainnya"] (string).
+      3. "category": Pilih salah satu kategori paling cocok dari list ini: ["Belanja", "Makan", "Transport", "Tagihan", "Hiburan", "Gaji", "Zakat", "Sedekah", "Lainnya"] (string).
       4. "type": Jika kalimatnya tentang mendapat uang/gaji/pemasukan, isikan "pemasukan". Jika tentang membeli/membayar/keluar uang, isikan "pengeluaran" (string).
 
       Contoh Input: "Tadi beli nasi padang 25 ribu pakai ayam"
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       {
         "name": "Beli Nasi Padang",
         "amount": 25000,
-        "category": "Makanan",
+        "category": "Makan",
         "type": "pengeluaran"
       }
 
