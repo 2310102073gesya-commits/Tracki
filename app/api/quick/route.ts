@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
       let cleanName = text.replace(/[0-9.]+/g, '').replace(/ribu/ig, '').replace(/  +/g, ' ').trim();
       if (!cleanName) cleanName = 'Transaksi';
       // Capitalize first letters
-      cleanName = cleanName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      cleanName = cleanName.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
       return NextResponse.json({ 
         success: true, 
