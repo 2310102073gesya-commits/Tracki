@@ -157,6 +157,26 @@ export default function SplitPage() {
             </div>
           </div>
 
+          <div className="card" style={{ marginBottom: '14px' }}>
+            <div className="card-title">Detail Tagihan</div>
+            <div className="form-group" style={{ marginBottom: '10px' }}>
+              <label htmlFor="merchant" className="form-label">Nama Toko / Tempat</label>
+              <input id="merchant" className="form-input" type="text" placeholder="Contoh: Warteg Bu Sari" value={splitData.merchant === 'Toko' ? '' : splitData.merchant} onChange={e => setSplitData({ ...splitData, merchant: e.target.value || 'Toko' })} />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label htmlFor="totalBill" className="form-label">Total Tagihan (Rp)</label>
+              <input id="totalBill" className="form-input" type="text" placeholder="Rp 0" value={splitData.total === 'Rp 0' ? '' : splitData.total} onChange={e => {
+                const v = e.target.value.replace(/\D/g, '');
+                if (v) {
+                  const formatted = 'Rp ' + Number.parseInt(v, 10).toLocaleString('id-ID');
+                  setSplitData({ ...splitData, total: formatted });
+                } else {
+                  setSplitData({ ...splitData, total: 'Rp 0' });
+                }
+              }} />
+            </div>
+          </div>
+
           <div className="card">
             <div className="card-title">Metode Split</div>
             <div className="tabs">
