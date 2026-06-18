@@ -6,7 +6,7 @@ const formatMoney = (num: number) => `Rp ${num.toLocaleString('id-ID')}`;
 
 export default function SplitPage() {
   const [members, setMembers] = useState([
-    { id: '1', name: 'Kamu (Host)', role: 'Host', color: 'linear-gradient(135deg,var(--pink),var(--blue))', initial: 'KM', customPercent: 0 }
+    { id: '1', name: 'Kamu (Host)', role: 'Host', color: 'linear-gradient(135deg,var(--pink),var(--blue))', initial: 'KM', customPercent: 0, isPaid: true }
   ]);
   const [newName, setNewName] = useState('');
   const [tab, setTab] = useState('Rata Sama');
@@ -43,7 +43,8 @@ export default function SplitPage() {
       role: 'Anggota', 
       color: g, 
       initial: init,
-      customPercent: 0
+      customPercent: 0,
+      isPaid: false
     }]);
     setNewName('');
   };
@@ -66,6 +67,10 @@ export default function SplitPage() {
 
   const updateCustomPercent = (id: string, percent: number) => {
     setMembers(members.map(m => m.id === id ? { ...m, customPercent: percent } : m));
+  };
+
+  const togglePaid = (id: string) => {
+    setMembers(members.map(m => m.id === id ? { ...m, isPaid: !m.isPaid } : m));
   };
 
   // CALCULATE SPLIT
@@ -112,6 +117,8 @@ export default function SplitPage() {
       const amt = Math.round(memberAmounts[m.id] || 0);
       if (m.id === '1') {
         text += `✅ ${m.name} — ${formatMoney(amt)} (Host, bayar dulu)\n`;
+      } else if (m.isPaid) {
+        text += `✅ ${m.name} — LUNAS\n`;
       } else {
         text += `🧾 ${m.name} — Transfer ${formatMoney(amt)}\n`;
       }
@@ -259,7 +266,17 @@ export default function SplitPage() {
                   {m.id === '1' ? (
                     <div style={{ fontSize: '10px', color: 'var(--pink)' }}>Bagianmu</div>
                   ) : (
-                    <div className="badge badge-pink" style={{ fontSize: '9px' }}>🧾 Belum Lunas</div>
+                    <button 
+                      onClick={() => togglePaid(m.id)}
+                      className="badge" 
+                      style={{ 
+                        fontSize: '9px', cursor: 'pointer', border: 'none',
+                        background: m.isPaid ? 'var(--green-dim)' : 'var(--pink-dim)',
+                        color: m.isPaid ? 'var(--green)' : 'var(--pink)'
+                      }}
+                    >
+                      {m.isPaid ? '✅ LUNAS' : '🧾 BELUM LUNAS'}
+                    </button>
                   )}
                 </div>
               </div>
