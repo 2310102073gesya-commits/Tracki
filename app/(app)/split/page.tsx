@@ -80,24 +80,6 @@ export default function SplitPage() {
   if (tab === 'Rata Sama') {
     const perPerson = parsedTotal / (members.length || 1);
     members.forEach(m => memberAmounts[m.id] = perPerson);
-  } else if (tab === 'Per Item') {
-    let unassignedTotal = parsedTotal; // We start with total, and subtract assigned items
-    
-    splitData.items.forEach(item => {
-      const price = parseMoney(item.price);
-      if (item.assignedTo && item.assignedTo !== 'all') {
-        if (memberAmounts[item.assignedTo] !== undefined) {
-          memberAmounts[item.assignedTo] += price;
-          unassignedTotal -= price;
-        }
-      }
-    });
-
-    // Sisa tagihan (termasuk item 'all' dan tax) dibagi rata
-    if (unassignedTotal > 0 && members.length > 0) {
-      const splitUnassigned = unassignedTotal / members.length;
-      members.forEach(m => memberAmounts[m.id] += splitUnassigned);
-    }
   } else if (tab === 'Custom %') {
     members.forEach(m => {
       memberAmounts[m.id] = (parsedTotal * (m.customPercent || 0)) / 100;
@@ -187,7 +169,7 @@ export default function SplitPage() {
           <div className="card">
             <div className="card-title">Metode Split</div>
             <div className="tabs">
-              {['Rata Sama', 'Per Item', 'Custom %'].map(t => (
+              {['Rata Sama', 'Custom %'].map(t => (
                 <div key={t} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setTab(t); }} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>{t}</div>
               ))}
             </div>
@@ -197,31 +179,6 @@ export default function SplitPage() {
               <div style={{ fontFamily: 'var(--font-head)', fontSize: '26px', fontWeight: 700, background: 'linear-gradient(135deg,var(--pink),var(--blue))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{formatMoney(parsedTotal)}</div>
               <div style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '3px' }}>{splitData.merchant} · {members.length} orang</div>
             </div>
-
-            {tab === 'Per Item' && (
-              <div style={{ marginTop: '14px', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 600, marginBottom: '8px', color: 'var(--text2)' }}>Tugaskan Item ke Anggota:</div>
-                {splitData.items.map((item, idx) => (
-                  <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px', background: 'var(--bg)', borderRadius: 'var(--r-sm)', marginBottom: '6px', border: '1px solid var(--border)' }}>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: '12px', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.name}</div>
-                      <div style={{ fontSize: '11px', color: 'var(--pink)' }}>{item.price} <span style={{ color: 'var(--muted)' }}>x{item.qty || 1}</span></div>
-                    </div>
-                    <select 
-                      value={item.assignedTo || 'all'} 
-                      onChange={(e) => setItemAssignee(idx, e.target.value)}
-                      style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--border)', fontSize: '11px', background: 'var(--surface)', maxWidth: '100px' }}
-                    >
-                      <option value="all">Bagi Rata (Semua)</option>
-                      {members.map(m => (
-                        <option key={m.id} value={m.id}>{m.name}</option>
-                      ))}
-                    </select>
-                  </div>
-                ))}
-                <div style={{ fontSize: '10px', color: 'var(--muted)', marginTop: '8px', textAlign: 'center' }}>*Sisa tagihan (Pajak, Servis, atau item "Bagi Rata") otomatis dibagi rata ke semua orang.</div>
-              </div>
-            )}
 
             {tab === 'Custom %' && (
               <div style={{ marginTop: '14px', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
