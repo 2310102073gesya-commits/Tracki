@@ -23,11 +23,10 @@ export default function SplitPage() {
     if (dataStr) {
       try {
         const data = JSON.parse(dataStr);
-        // Initialize assignedTo for items
-        if (data.items) {
-          data.items = data.items.map((i: any) => ({ ...i, assignedTo: 'all' }));
-        }
         setSplitData(data);
+        if (data.members && Array.isArray(data.members)) {
+          setMembers(data.members);
+        }
       } catch (e) {}
     }
   }, []);
@@ -35,9 +34,17 @@ export default function SplitPage() {
   useEffect(() => {
     // Simpan ke localStorage setiap ada perubahan agar terbaca di Laporan/Dashboard
     if (splitData.total !== 'Rp 0' || splitData.merchant !== 'Toko') {
-      localStorage.setItem('split_data', JSON.stringify(splitData));
+      localStorage.setItem('split_data', JSON.stringify({ ...splitData, members }));
     }
-  }, [splitData]);
+  }, [splitData, members]);
+
+  const handleSelesai = () => {
+    if (confirm('Akhiri sesi patungan ini dan hapus datanya?')) {
+      localStorage.removeItem('split_data');
+      setSplitData({ merchant: 'Toko', total: 'Rp 0', items: [] });
+      setMembers([{ id: '1', name: 'Kamu (Host)', role: 'Host', color: 'linear-gradient(135deg,var(--pink),var(--blue))', initial: 'KM', customPercent: 0, isPaid: true }]);
+    }
+  };
 
   const handleAddMember = () => {
     if (!newName.trim()) return;
@@ -254,6 +261,9 @@ export default function SplitPage() {
             </div>
             <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '11px' }} onClick={handleCopyWa}>
               📋 Copy Pesan WA
+            </button>
+            <button className="btn" style={{ width: '100%', justifyContent: 'center', marginTop: '8px', border: '1px solid var(--red)', color: 'var(--red)', background: 'transparent' }} onClick={handleSelesai}>
+              ❌ Akhiri & Hapus Sesi
             </button>
           </div>
         </div>
