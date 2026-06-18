@@ -54,14 +54,29 @@ export async function POST(req: NextRequest) {
       }
       if (amount === 0) amount = 15000; // Default aman
       
-      const isIncome = text.toLowerCase().includes('gaji') || text.toLowerCase().includes('dapat');
+      const tLower = text.toLowerCase();
+      const isIncome = tLower.includes('gaji') || tLower.includes('dapat') || tLower.includes('dikasih');
       
+      let cat = isIncome ? 'Lainnya' : 'Lainnya';
+      if (!isIncome) {
+        if (tLower.includes('makan') || tLower.includes('nasi') || tLower.includes('minum') || tLower.includes('kopi') || tLower.includes('teh')) cat = 'Makan';
+        else if (tLower.includes('gojek') || tLower.includes('grab') || tLower.includes('parkir') || tLower.includes('bensin') || tLower.includes('kereta')) cat = 'Transport';
+        else if (tLower.includes('listrik') || tLower.includes('air') || tLower.includes('kos') || tLower.includes('wifi') || tLower.includes('tagihan')) cat = 'Tagihan';
+        else if (tLower.includes('belanja') || tLower.includes('beli') || tLower.includes('baju') || tLower.includes('sepatu')) cat = 'Belanja';
+      }
+
+      // Bersihkan nama dari angka dan kata "ribu"
+      let cleanName = text.replace(/[0-9.]+/g, '').replace(/ribu/ig, '').replace(/  +/g, ' ').trim();
+      if (!cleanName) cleanName = 'Transaksi';
+      // Capitalize first letters
+      cleanName = cleanName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
       return NextResponse.json({ 
         success: true, 
         data: {
-          name: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
+          name: cleanName.substring(0, 30) + (cleanName.length > 30 ? '...' : ''),
           amount: amount,
-          category: 'Lainnya',
+          category: cat,
           type: isIncome ? 'pemasukan' : 'pengeluaran'
         }
       });

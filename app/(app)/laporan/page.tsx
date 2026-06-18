@@ -69,7 +69,11 @@ export default function LaporanPage() {
   
   transactions.forEach(t => {
     if (t.type === 'pengeluaran') {
-      const cat = t.category || 'Lainnya';
+      let cat = t.category || 'Lainnya';
+      if (cat === 'Makanan') cat = 'Makan';
+      if (cat === 'Transportasi') cat = 'Transport';
+      if (cat === 'Amal') cat = 'Sedekah';
+
       expenseByCategory[cat] = (expenseByCategory[cat] || 0) + t.amount;
       totalExpense += t.amount;
     }
